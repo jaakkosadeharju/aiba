@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>AI Ball</title>
+</head>
+
+<body>
+  <canvas id="game-area" width="500" height="250" style="border:1px solid #000000;"></canvas>
+
+  <script>
+  </script>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let gameData = {
+      teams: [],
+      area: {
+        size: {
+          height: 0,
+          width: 0
+        }
+      }
+    };
+    const socket = io();
+    const canvas = document.getElementById('game-area');
+    const ctx = canvas.getContext('2d');
+
+    // convert from game area position to canvas position
+    const toCanvasX = x => canvas.width * (x / gameData.area.size.width);
+    const toCanvasY = y => canvas.height * (y / gameData.area.size.width);
+
+    const updateCanvas = () => {
+      // clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // draw players
+      gameData.teams.forEach(team => {
+        team.players.forEach(player => {
+          ctx.beginPath();
+          ctx.arc(toCanvasX(player.pos.x), toCanvasY(player.pos.y), 10, 0, 2 * Math.PI);
+          ctx.fillStyle = team.color;
+          ctx.fill();
+        });
+      });
+    };
+
+    // update canvas when server sends new positions
+    socket.on('new positions', function (teams) {
+      gameData.teams = JSON.parse(teams);
+      updateCanvas();
+    });
+
+    socket.on('area data', function (area) {
+      gameData.area = JSON.parse(area);
+    });
+
+    updateCanvas();
+  </script>
+</body>
+
+</html>
