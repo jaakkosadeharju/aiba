@@ -20,6 +20,15 @@
         size: {
           height: 0,
           width: 0
+        },
+        goals: []
+      },
+      ball: {
+        size: {
+          radius: 0
+        },
+        pos: {
+          x: 0, y: 0
         }
       }
     };
@@ -33,7 +42,24 @@
 
     const updateCanvas = () => {
       // clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, gameData.area.size.width, gameData.area.size.height);
+      ctx.beginPath();
+      ctx.rect(toCanvasX(20), 0, toCanvasX(gameData.area.size.width-40), toCanvasY(gameData.area.size.height));
+      ctx.stroke();
+
+      // draw goals
+      gameData.area.goals.forEach(goal => {
+        if (goal.end == 'left') {
+          ctx.beginPath();
+          ctx.rect(0, toCanvasY((gameData.area.size.height-goal.size)/2), toCanvasX(20), toCanvasY(goal.size));
+          ctx.stroke();
+        }
+        if (goal.end == 'right') {
+          ctx.beginPath();
+          ctx.rect(toCanvasX(gameData.area.size.width-20), toCanvasY((gameData.area.size.height-goal.size)/2), gameData.area.size.width, toCanvasY(goal.size));
+          ctx.stroke();
+        }
+      });
 
       // draw players
       gameData.teams.forEach(team => {
@@ -44,6 +70,13 @@
           ctx.fill();
         });
       });
+
+      // draw ball
+      ctx.beginPath();
+      ctx.arc(toCanvasX(gameData.ball.pos.x), toCanvasY(gameData.ball.pos.y), gameData.ball.size, 0, 2 * Math.PI);
+      ctx.fillStyle = gameData.ball.color;
+      ctx.fill();
+
     };
 
     // update canvas when server sends new positions
@@ -55,6 +88,11 @@
     socket.on('area data', function (area) {
       gameData.area = JSON.parse(area);
     });
+
+    socket.on('ball data', function (ball) {
+      gameData.ball = JSON.parse(ball);
+    });
+
 
     updateCanvas();
   </script>
