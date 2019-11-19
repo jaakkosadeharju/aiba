@@ -1,12 +1,12 @@
 class Player {
-    constructor(id, team, name, position, speed, stamina, acceleration) {
+    constructor(id, team, name, position, speed, stamina, power) {
         this.id = id;
         this.team = team;
         this.name = name;
         this.position = position;
         this.speed = speed;
         this.stamina = stamina;
-        this.acceleration = acceleration; //Should't this be power?
+        this.power = power;
 
         //Throw exception or something if speed+stmina+power is on steroids.
 
