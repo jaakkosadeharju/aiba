@@ -3,10 +3,11 @@
 
 <head>
   <title>AI Ball</title>
+  <link rel="stylesheet" type="text/css" href ="/css/styleAndFashion.css" />
 </head>
 
 <body>
-  <canvas id="game-area" width="500" height="250" style="border:1px solid #000000;"></canvas>
+  <div id="stadium"><canvas id="game-area" width="900" height="660" style="border:1px solid #000000;"></canvas></div>
 
   <script>
   </script>
@@ -28,7 +29,7 @@
 
     // convert from game area position to canvas position
     const toCanvasX = x => canvas.width * (x / gameData.area.size.width);
-    const toCanvasY = y => canvas.height * (y / gameData.area.size.width);
+    const toCanvasY = y => canvas.height * (y / gameData.area.size.height);
 
     const updateCanvas = () => {
       // clear canvas
