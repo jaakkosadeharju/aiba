@@ -65,7 +65,7 @@
       gameData.teams.forEach(team => {
         team.players.forEach(player => {
           ctx.beginPath();
-          ctx.arc(toCanvasX(player.pos.x), toCanvasY(player.pos.y), 10, 0, 2 * Math.PI);
+          ctx.arc(toCanvasX(player.position.x), toCanvasY(player.position.y), 10, 0, 2 * Math.PI);
           ctx.fillStyle = team.color;
           ctx.fill();
         });
