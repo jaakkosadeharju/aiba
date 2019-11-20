@@ -4,7 +4,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var Ball = require('./game_objects/ball').Ball;
 var Player = require('./game_objects/player.js').Player;
-//test
+
 const areaHeight = 660, areaWidth = 940, playerSize = 10, ballSize = 5, goalWidth = 240;
 
 var gameData = {
