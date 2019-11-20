@@ -4,7 +4,6 @@ class Position {
     this.y = y;
   }
 
-  
   // TODO: helper methods e.g. distanceTo(pos), directionTo(pos)...
 }
 

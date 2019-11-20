@@ -9,7 +9,7 @@ class Player {
             speedX: (Math.random() - 0.5),
             speedY: (Math.random() - 0.5)
         };
-        this.mass = 1; // We use same mass for all players
+        this.mass = 1; // We use same mass for all players unless we implement collisions
         this.skill = {
             speed,
             stamina,
@@ -33,8 +33,9 @@ class Player {
 		this.position = position;
     }
 
+
 	//Request to move the player. 
-	//Returns the closest possible position and updates stamina left.
+	//Set the new position and updates stamina left.
 	move(dt) {
         const dx = this.speed.speedX * dt;
         const dy = this.speed.speedY * dt;
