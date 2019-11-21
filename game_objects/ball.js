@@ -1,20 +1,35 @@
+var Position = require('./position.js').Position;
+
 class Ball {
-    constructor(name, position) {
+    constructor(size, position, direction, speed, color, gameArea) {
+    	this.size = size;
         this.position = position;
         this.direction = direction;
         this.speed = speed;
+        this.color = color;
+        this.gameArea = gameArea;
+        this.controlledBy = null;
     }
 
-    isInControl(player) {
-        return 0;
+    takeControl(player) {
+        this.controlledBy = player;
     }
 
     //Kick action resulting movment
     //direction: direction of the kick
     //power: desired power to kick.
-    forceApplied(direction, power) {
+    kick(direction, power) {
 
     }
 
-    //implement slowing of the movement if not in player's control
+	//Set the new position
+	//TODO: Apply slowing forces if not controlled
+	move(dt) {
+		if (this.controlledBy != null) {
+			this.position = new Position(this.controlledBy.position.x + (this.size+this.controlledBy.size)/2, this.controlledBy.position.y);
+		}
+	}
+
 }
+
+exports.Ball = Ball;

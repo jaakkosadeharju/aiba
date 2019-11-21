@@ -24,12 +24,9 @@
         goals: []
       },
       ball: {
-        size: {
-          radius: 0
-        },
-        pos: {
-          x: 0, y: 0
-        }
+        size: 0,
+        position: { x: 0, y: 0 },
+        color: '#000000'
       }
     };
     const socket = io();
@@ -73,7 +70,7 @@
 
       // draw ball
       ctx.beginPath();
-      ctx.arc(toCanvasX(gameData.ball.pos.x), toCanvasY(gameData.ball.pos.y), gameData.ball.size, 0, 2 * Math.PI);
+      ctx.arc(toCanvasX(gameData.ball.position.x), toCanvasY(gameData.ball.position.y), gameData.ball.size, 0, 2 * Math.PI);
       ctx.fillStyle = gameData.ball.color;
       ctx.fill();
 
@@ -91,6 +88,7 @@
 
     socket.on('ball data', function (ball) {
       gameData.ball = JSON.parse(ball);
+        console.log(gameData.ball.position.x);
     });
 
 

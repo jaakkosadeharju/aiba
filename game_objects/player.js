@@ -1,9 +1,10 @@
 var Position = require('./position.js').Position;
 
 class Player {
-    constructor({id, name, position, speed, stamina, power, gameArea}) {
+    constructor({id, name, size, position, speed, stamina, power, gameArea, ball}) {
         this.id = id;
         this.name = name;
+        this.size = size;
         this.position = position;
         this.speed = {
             speedX: (Math.random() - 0.5),
@@ -20,6 +21,7 @@ class Player {
             direction: 0   // players desired direction in radians?
         }
         this.gameArea = gameArea;
+        this.ball = ball;
 
         if (speed + stamina + power > 100) {
             throw "Overskilled player";
@@ -33,8 +35,6 @@ class Player {
 		this.position = position;
     }
 
-
-	//Request to move the player. 
 	//Set the new position and updates stamina left.
 	move(dt) {
         const dx = this.speed.speedX * dt;
@@ -59,15 +59,12 @@ class Player {
         }
 
         this.setPosition(new Position(newX, newY));
+
+        var distance = Math.sqrt(Math.pow(this.ball.position.x-this.position.x,2)+Math.pow(this.ball.position.y-this.position.y,2));
+        if(distance <= (this.ball.size+this.size)/2) {
+        	this.ball.takeControl(this);
+        }
 	}
-
-    
-
-	//Kicks ball to desired direction with desired force. Not sure if this method is needed, but this is an action of a player's.
-	kick(force, direction) {
-
-	}
-
 }
 
 exports.Player = Player;

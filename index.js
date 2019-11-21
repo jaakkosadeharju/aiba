@@ -28,16 +28,11 @@ var gameArea = {
   ]
 };
 
+var ball = new Ball(ballSize, new Position(areaWidth/2, areaHeight/2), 0, 0, '#000000', gameArea);
+
 var gameData = {
   area: gameArea,
-  ball: {
-    size: ballSize,
-    pos: {
-      x: areaWidth/2,
-      y: areaHeight/2
-    },
-    color: '#000000'
-  },
+  ball: ball,
   teams: [
     new Team({
       id: 1,
@@ -45,11 +40,11 @@ var gameData = {
       color: '#00ff00',
       players: [
         // game area 900x660
-        new Player({id: 11, name: "Ndumiso Nkadimeng", position: new Position(areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 12, name: "Emlyn Hukkes", position: new Position(areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 13, name: "Sossermaster", position: new Position(areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 14, name: "Player 4a", position: new Position(areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 15, name: "Player 5a", position: new Position(areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 11, name: "Ndumiso Nkadimeng", size: playerSize, position: new Position(areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 12, name: "Emlyn Hukkes", size: playerSize, position: new Position(areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 13, name: "Sossermaster", size: playerSize, position: new Position(areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 14, name: "Player 4a", size: playerSize, position: new Position(areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 15, name: "Player 5a", size: playerSize, position: new Position(areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
       ]
     }),
     new Team({
@@ -57,11 +52,11 @@ var gameData = {
       name: 'Sandibar',
       color: '#ff0000',
       players: [
-        new Player({id: 21, name: "Player 1b", position: new Position(3*areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 22, name: "Player 2b", position: new Position(3*areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 23, name: "Player 3b", position: new Position(3*areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 24, name: "Player 4b", position: new Position(3*areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
-        new Player({id: 25, name: "Player 5b", position: new Position(3*areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 21, name: "Player 1b", size: playerSize, position: new Position(3*areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 22, name: "Player 2b", size: playerSize, position: new Position(3*areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 23, name: "Player 3b", size: playerSize, position: new Position(3*areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 24, name: "Player 4b", size: playerSize, position: new Position(3*areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 25, name: "Player 5b", size: playerSize, position: new Position(3*areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
       ]
     })
   ]
@@ -72,9 +67,30 @@ setInterval(() => {
   gameData.teams.forEach(team =>
     team.players.forEach(player =>
       player.move(10)));
-  
-  io.emit('new positions', JSON.stringify(gameData.teams));
-  io.emit('ball data', JSON.stringify(gameData.ball));
+
+  ball.move(0);
+
+  io.emit('new positions', JSON.stringify(gameData.teams, function(key, value) {
+    if (value instanceof Ball) {
+      if (value.controlledBy !== null) {
+        var clonedObj = { ...value };
+        clonedObj.controlledBy = null;
+        return clonedObj;
+      }
+    }
+    return value;
+  }));
+
+  io.emit('ball data', JSON.stringify(ball, function(key, value) {
+    if (value instanceof Ball) {
+      if (value.controlledBy !== null) {
+        var clonedObj = { ...value };
+        clonedObj.controlledBy = null;
+        return clonedObj;
+      }
+    }
+    return value;
+  }));
 }, 100);
 
 app.use(express.static(__dirname + '/public'));
