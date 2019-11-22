@@ -38,23 +38,22 @@ class Player {
     }
 
 	//Set the new position and updates stamina left.
-	move(target) {
+	move(dt, target) {
 
 		//TODO: Add conversions between skill numbers and physical quantites to ease the calculation process and make the movement smooth and realistic
 
 		//meters to pixels conversion factor
 		let metersToPixelsRatio = 10;
-		let refreshRate = 0.1 // in seconds
 
         //Calculate acceleration
-        let xForce = Math.cos(target.direction)*target.force;
-        let yForce = Math.sin(target.direction)*target.force;
+        let xForce = Math.cos(target.direction) * target.force;
+        let yForce = Math.sin(target.direction) * target.force;
 
         let xAcceleration = xForce / this.mass;
         let yAcceleration = yForce / this.mass;
 
-        this.speed.x = this.speed.x + xAcceleration*refreshRate*metersToPixelsRatio; //TODO: reduce if out of stamina
-        this.speed.y = this.speed.y + yAcceleration*refreshRate*metersToPixelsRatio;
+        this.speed.x = this.speed.x + xAcceleration * dt * metersToPixelsRatio; //TODO: reduce if out of stamina
+        this.speed.y = this.speed.y + yAcceleration * dt * metersToPixelsRatio;
 
         let newX = this.position.x + this.speed.x;
         let newY = this.position.y + this.speed.y;
@@ -82,13 +81,13 @@ class Player {
 
         this.setPosition(new Position(newX, newY));
 
-        if(this.distanceToPoint(this.ball.position) <= (this.ball.size+this.size)/2) {
+        if(this.distanceToPoint(this.ball.position) <= (this.ball.size + this.size)/2) {
         	this.ball.takeControl(this);
         }
 	}
 
 	distanceToPoint(position) {
-		return Math.sqrt(Math.pow(position.x-this.position.x,2)+Math.pow(position.y-this.position.y,2))
+		return Math.sqrt(Math.pow(position.x-this.position.x,2) + Math.pow(position.y - this.position.y,2))
 	}
 }
 
