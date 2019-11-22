@@ -66,7 +66,7 @@ setInterval(() => {
   // Move each player
   gameData.teams.forEach(team =>
     team.players.forEach(player =>
-      player.move(10)));
+      player.move({ force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
   ball.move(0);
 
