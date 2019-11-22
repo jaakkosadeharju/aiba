@@ -39,7 +39,6 @@ class Player {
 
 	//Set the new position and updates stamina left.
 	move(dt, target) {
-
 		//TODO: Add conversions between skill numbers and physical quantites to ease the calculation process and make the movement smooth and realistic
 
 		//meters to pixels conversion factor

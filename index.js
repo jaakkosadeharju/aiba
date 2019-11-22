@@ -74,26 +74,18 @@ setInterval(() => {
 
   ball.move(0);
 
-  io.emit('new positions', JSON.stringify(gameData.teams, function(key, value) {
-    if (value instanceof Ball) {
-      if (value.controlledBy !== null) {
-        var clonedObj = { ...value };
-        clonedObj.controlledBy = null;
-        return clonedObj;
-      }
+  io.emit('new positions', JSON.stringify({
+    teams: gameData.teams.map(team => ({
+      ...team,
+      players: team.players.map(player => ({
+        position: player.position
+      }))
+    })),
+    ball: {
+      position: gameData.ball.position,
+      color: gameData.ball.color,
+      size: gameData.ball.size
     }
-    return value;
-  }));
-
-  io.emit('ball data', JSON.stringify(ball, function(key, value) {
-    if (value instanceof Ball) {
-      if (value.controlledBy !== null) {
-        var clonedObj = { ...value };
-        clonedObj.controlledBy = null;
-        return clonedObj;
-      }
-    }
-    return value;
   }));
 }, 100);
 
