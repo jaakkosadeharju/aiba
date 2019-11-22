@@ -6,6 +6,7 @@ var Ball = require('./game_objects/ball').Ball;
 var Team = require('./game_objects/team.js').Team;
 var Player = require('./game_objects/player.js').Player;
 var Position = require('./game_objects/position.js').Position;
+var GameClock = require('./game_objects/game_clock.js').GameClock;
 
 const areaHeight = 660, areaWidth = 940, playerSize = 10, ballSize = 5, goalWidth = 240;
 
@@ -31,6 +32,7 @@ var gameArea = {
 var ball = new Ball(ballSize, new Position(areaWidth/2, areaHeight/2), 0, 0, '#000000', gameArea);
 
 var gameData = {
+  clock: new GameClock(),
   area: gameArea,
   ball: ball,
   teams: [
@@ -66,7 +68,7 @@ setInterval(() => {
   // Move each player
   gameData.teams.forEach(team =>
     team.players.forEach(player =>
-      player.move(10)));
+      player.move(gameData.clock.getFrame(), { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
   ball.move(0);
 
@@ -103,6 +105,9 @@ io.on('connection', function (socket) {
   console.log('a user sonnested');
   socket.emit('area data', JSON.stringify(gameData.area));
 });
+
+// TODO: start when both player ready
+gameData.clock.start();
 
 http.listen(3000, function () {
   console.log('listening on *:3000');
