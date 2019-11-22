@@ -52,8 +52,8 @@ class Player {
         let xAcceleration = xForce / this.mass;
         let yAcceleration = yForce / this.mass;
 
-        this.speed.x = this.speed.x + xAcceleration * dt * metersToPixelsRatio; //TODO: reduce if out of stamina
-        this.speed.y = this.speed.y + yAcceleration * dt * metersToPixelsRatio;
+        this.speed.x = this.speed.x + xAcceleration * (dt/1000) * metersToPixelsRatio; //TODO: reduce if out of stamina
+        this.speed.y = this.speed.y + yAcceleration * (dt/1000) * metersToPixelsRatio;
 
         let newX = this.position.x + this.speed.x;
         let newY = this.position.y + this.speed.y;

@@ -65,10 +65,12 @@ var gameData = {
 };
 
 setInterval(() => {
+  const dt = gameData.clock.getFrame();
+
   // Move each player
   gameData.teams.forEach(team =>
     team.players.forEach(player =>
-      player.move(gameData.clock.getFrame(), { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
+      player.move(dt, { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
   ball.move(0);
 
