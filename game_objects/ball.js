@@ -2,7 +2,7 @@ var Position = require('./position.js').Position;
 
 class Ball {
     constructor(size, position, direction, speed, color, gameArea) {
-    	this.size = size;
+        this.size = size;
         this.position = position;
         this.direction = direction;
         this.speed = speed;
@@ -22,13 +22,21 @@ class Ball {
 
     }
 
-	//Set the new position
-	//TODO: Apply slowing forces if not controlled
-	move(dt) {
-		if (this.controlledBy != null) {
-			this.position = new Position(this.controlledBy.position.x + (this.size+this.controlledBy.size)/2, this.controlledBy.position.y);
-		}
-	}
+    //Set the new position
+    //TODO: Apply slowing forces if not controlled
+    move(dt, closestPlayer) {
+        // TODO: Calculate the movement if ball is free
+        
+        if (closestPlayer.position.distanceTo(this.position) < closestPlayer.size * 6) {
+            console.log("HEHEHEHE", closestPlayer.size * 6);
+            
+            this.takeControl(closestPlayer);
+        }
+
+        if (this.controlledBy !== null) {
+            this.position = this.controlledBy.position.addPolar(closestPlayer.size, closestPlayer.target.direction);
+        }
+    }
 
 }
 
