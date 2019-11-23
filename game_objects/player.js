@@ -6,9 +6,9 @@ class Player {
         this.name = name;
         this.size = size;
         this.position = position;
-        this.speed = { //Lets assume this m/s
-            x: (Math.random() - 0.5),
-            y: (Math.random() - 0.5)
+        this.speed = { //Lets handle this as m/s
+            x: 0,
+            y: 0
         };
         this.mass = 10; // something scalable to be used in formulas, if we want to vary this later
         this.skill = {
@@ -80,10 +80,33 @@ class Player {
 
         this.setPosition(new Position(newX, newY));
 
-        if(this.distanceToPoint(this.ball.position) <= (this.ball.size + this.size)/2) {
+        if(this.distanceToPoint(this.ball.position) <= (this.ball.size + this.size)) {
         	this.ball.takeControl(this);
         }
 	}
+
+    //Kick action resulting movment
+    //direction: direction of the kick
+    //power: desired power to kick.
+    kick(dt, direction, force) {
+
+        //not in control of the player
+        if(this.ball.controlledBy != this)
+            return;
+            
+        //meters to pixels conversion factor
+        let metersToPixelsRatio = 10;
+        let acceleration = force / this.ball.weight;
+        let speed = Math.sqrt(Math.pow(this.ball.speed.x, 2)+Math.pow(this.ball.speed.y, 2));
+        speed = speed + acceleration * (dt/1000) * metersToPixelsRatio;
+
+        //release ball
+        this.ball.controlledBy = null;
+
+
+        this.ball.move(dt, direction, speed);
+        console.log("Kick");
+    }
 
 	distanceToPoint(position) {
 		return Math.sqrt(Math.pow(position.x-this.position.x,2) + Math.pow(position.y - this.position.y,2))

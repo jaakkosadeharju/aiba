@@ -5,31 +5,21 @@ var io = require('socket.io')(http);
 var Ball = require('./game_objects/ball').Ball;
 var Team = require('./game_objects/team.js').Team;
 var Player = require('./game_objects/player.js').Player;
+var Goal = require('./game_objects/goal.js').Goal;
 var Position = require('./game_objects/position.js').Position;
 var GameClock = require('./game_objects/game_clock.js').GameClock;
 
-const areaHeight = 660, areaWidth = 940, playerSize = 10, ballSize = 5, goalWidth = 240;
+const areaHeight = 660, areaWidth = 940, playerSize = 40, ballSize = 5, goalWidth = 74, goalDepth = 20;
 
 var gameArea = {
   size: {
     width: areaWidth,
     height: areaHeight
   },
-  goals: [
-    {
-      teamId: 0,
-      end: "left",
-      size: goalWidth,
-    },
-    {
-      teamId: 1,
-      end: "right",
-      size: goalWidth,
-    }
-  ]
+  goals: []
 };
 
-var ball = new Ball(ballSize, new Position(areaWidth/2, areaHeight/2), 0, 0, '#000000', gameArea);
+var ball = new Ball(ballSize, new Position(areaWidth/2, areaHeight/2), 0, '#000000', gameArea);
 
 var gameData = {
   clock: new GameClock(),
@@ -64,6 +54,10 @@ var gameData = {
   ]
 };
 
+//Initialize goals
+gameArea.goals[0] = new Goal({team: gameData.teams[0], corners: {topLeft: -goalDepth, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: 0, bottomRight: goalWidth} });
+gameArea.goals[1] = new Goal({team: gameData.teams[1], corners: {topLeft: gameArea.size.width, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: goalDepth, bottomRight: goalWidth} });
+
 setInterval(() => {
   const dt = gameData.clock.getFrame();
 
@@ -72,13 +66,14 @@ setInterval(() => {
     team.players.forEach(player =>
       player.move(dt, { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
-  ball.move(0);
+  ball.move(dt, ball.direction, Math.sqrt(Math.pow(ball.speed.x, 2)+Math.pow(ball.speed.y, 2)));
 
   io.emit('new positions', JSON.stringify({
     teams: gameData.teams.map(team => ({
       ...team,
       players: team.players.map(player => ({
-        position: player.position
+        position: player.position,
+        size: playerSize
       }))
     })),
     ball: {
@@ -89,6 +84,13 @@ setInterval(() => {
   }));
 }, 100);
 
+//test kicks. remove when AI's get added to players
+setInterval(() => {
+  const dt = gameData.clock.getFrame();
+  if(ball.controlledBy != null)
+    ball.controlledBy.kick(dt, Math.random()*2*Math.PI, 10);
+}, 5000);
+
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
@@ -97,7 +99,16 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user sonnested');
-  socket.emit('area data', JSON.stringify(gameData.area));
+  socket.emit('area data', JSON.stringify({      
+    size: {
+        height: gameArea.size.height,
+        width: gameArea.size.width
+      },
+    goals: gameArea.goals.map(goal => ({
+        corners: goal.corners,
+        size: goalWidth
+      })),
+    }));
 });
 
 // TODO: start when both player ready
