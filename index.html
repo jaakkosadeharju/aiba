@@ -77,20 +77,18 @@
     };
 
     // update canvas when server sends new positions
-    socket.on('new positions', function (teams) {
-      gameData.teams = JSON.parse(teams);
+    socket.on('new positions', function (positions) {
+      var positionData = JSON.parse(positions);
+      gameData.teams = positionData.teams;
+      gameData.ball = positionData.ball;
+      console.log(gameData.ball);
+      
       updateCanvas();
     });
 
     socket.on('area data', function (area) {
       gameData.area = JSON.parse(area);
     });
-
-    socket.on('ball data', function (ball) {
-      gameData.ball = JSON.parse(ball);
-        console.log(gameData.ball.position.x);
-    });
-
 
     updateCanvas();
   </script>
