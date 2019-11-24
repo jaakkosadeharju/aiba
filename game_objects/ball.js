@@ -13,10 +13,22 @@ class Ball {
         this.color = color;
         this.gameArea = gameArea;
         this.controlledBy = null;
+        this.ignoredPlayers = [];
     }
 
     takeControl(player) {
-        this.controlledBy = player;
+        // prevent previous controller to get the ball back immediately
+        if (this.controlledBy !== null && this.controlledBy != player) {
+            this.ignoredPlayers.push({time: Date.now(), player: this.controlledBy});
+        }
+
+        // remove players from quarantine after 1 sec
+        this.ignoredPlayers = this.ignoredPlayers.filter(p => p.time > Date.now() - 1000);
+
+        // set new controller if the player not in ignoredPlayers
+        if (!this.ignoredPlayers.some(p => p.player === player)) {
+            this.controlledBy = player;
+        }
     }
 
 	//Set the new position
