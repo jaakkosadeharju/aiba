@@ -6,6 +6,7 @@ class Player {
         this.name = name;
         this.size = size;
         this.position = position;
+        this.direction = null;
         this.speed = { //Lets handle this as m/s
             x: 0,
             y: 0
@@ -35,6 +36,10 @@ class Player {
 
 	setPosition(position) {
 		this.position = position;
+    }
+
+    calculateDirection() {
+        this.direction = Math.atan2(this.speed.y, this.speed.x);
     }
 
 	//Set the new position and updates stamina left.
@@ -78,30 +83,29 @@ class Player {
         }
 
         //TODO:increase or decrease staminaLeft by the power used
-
+        
+        this.calculateDirection();
         this.setPosition(new Position(newX, newY));
 	}
 
     //Kick action resulting movment
     //direction: direction of the kick
     //power: desired power to kick.
-    kick(dt, direction, force) {
+    kick(ball, dt, direction, force) {
 
         //not in control of the player
-        if(this.ball.controlledBy != this)
+        if(ball.controlledBy != this)
             return;
             
         //meters to pixels conversion factor
         let metersToPixelsRatio = 10;
-        let acceleration = force / this.ball.weight;
-        let speed = Math.sqrt(Math.pow(this.ball.speed.x, 2)+Math.pow(this.ball.speed.y, 2));
-        speed = speed + acceleration * (dt/1000) * metersToPixelsRatio;
+        let acceleration = force / ball.weight;
+        let speed = acceleration * (dt/1000) * metersToPixelsRatio;
 
         //release ball
-        this.ball.controlledBy = null;
+        ball.controlledBy = null;
 
-
-        this.ball.move(dt, direction, speed);
+        ball.move(dt, null, direction, speed);
         console.log("Kick");
     }
 }
