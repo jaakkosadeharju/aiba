@@ -100,12 +100,12 @@ class Player {
         //meters to pixels conversion factor
         let metersToPixelsRatio = 10;
         let acceleration = force / ball.weight;
-        let speed = acceleration * (dt/1000) * metersToPixelsRatio;
+        let velocity = acceleration * (dt/1000) * metersToPixelsRatio;
 
         //release ball
         ball.controlledBy = null;
 
-        ball.move(dt, null, direction, speed);
+        ball.move(dt, null, direction, velocity);
         console.log("Kick");
     }
 }
