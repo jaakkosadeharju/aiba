@@ -21,12 +21,17 @@ class Ball {
 
 	//Set the new position
 	//TODO: Apply slowing forces if not controlled
-	move(dt, direction, speed) {
+	move(dt, closestPlayer, direction, speed) {
 
-		if (this.controlledBy != null) {
+        if (closestPlayer.position.distanceTo(this.position) < closestPlayer.size * 6) {
+                this.takeControl(closestPlayer);
+            }
+
+		if (this.controlledBy !== null) {
             this.speed.x = 0;
             this.speed.y = 0;
-			this.position = new Position(this.controlledBy.position.x + (this.size+this.controlledBy.size), this.controlledBy.position.y);
+			
+            this.position = this.controlledBy.position.addPolar(closestPlayer.size, closestPlayer.target.direction);
 		}
         else {
 

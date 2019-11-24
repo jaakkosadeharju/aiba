@@ -2,7 +2,7 @@ class GameClock {
   constructor() {
     this.baseTime = 0; // ms
     this.startTime = null;
-    this.lastCalculationTime = 0;
+    this.lastCalculationTime = Date.now();
   }
 
   getTime() {

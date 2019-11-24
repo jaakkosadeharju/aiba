@@ -54,6 +54,10 @@ var gameData = {
   ]
 };
 
+
+// TODO: start when both player ready
+gameData.clock.start();
+
 //Initialize goals
 gameArea.goals[0] = new Goal({team: gameData.teams[0], corners: {topLeft: -goalDepth, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: 0, bottomRight: goalWidth} });
 gameArea.goals[1] = new Goal({team: gameData.teams[1], corners: {topLeft: gameArea.size.width, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: goalDepth, bottomRight: goalWidth} });
@@ -66,7 +70,15 @@ setInterval(() => {
     team.players.forEach(player =>
       player.move(dt, { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
-  ball.move(dt, ball.direction, Math.sqrt(Math.pow(ball.speed.x, 2)+Math.pow(ball.speed.y, 2)));
+  // Get closest player to the ball
+  // this supports more than two teams!
+  const closestByTeam = gameData.teams.map(team => team.closestPlayer(ball.position));
+  const closestPlayer = closestByTeam.sort((p1, p2) => 
+    p1.position.distanceTo(ball.position) < p2.position.distanceTo(ball.position) ? -1 : 1
+  )[0];
+
+  // Move the ball
+  ball.move(dt, closestPlayer, ball.direction, Math.sqrt(Math.pow(ball.speed.x, 2) + Math.pow(ball.speed.y, 2)));
 
   io.emit('new positions', JSON.stringify({
     teams: gameData.teams.map(team => ({
@@ -110,9 +122,6 @@ io.on('connection', function (socket) {
       })),
     }));
 });
-
-// TODO: start when both player ready
-gameData.clock.start();
 
 http.listen(3000, function () {
   console.log('listening on *:3000');

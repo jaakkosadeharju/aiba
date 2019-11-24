@@ -1,7 +1,7 @@
 var Position = require('./position.js').Position;
 
 class Player {
-    constructor({id, name, size, position, speed, stamina, power, gameArea, ball}) {
+    constructor({id, name, size, position, speed, stamina, power, gameArea}) {
         this.id = id;
         this.name = name;
         this.size = size;
@@ -23,7 +23,7 @@ class Player {
             direction: 0   // players desired direction in radians
         }
         this.gameArea = gameArea;
-        this.ball = ball;
+        // this.ball = ball;
 
         if (speed + stamina + power > 100) {
             throw "Overskilled player";
@@ -41,6 +41,7 @@ class Player {
 	move(dt, target) {
 		//TODO: Add conversions between skill numbers and physical quantites to ease the calculation process and make the movement smooth and realistic
 
+        this.target = target;
 		//meters to pixels conversion factor
 		let metersToPixelsRatio = 10;
 
@@ -79,10 +80,6 @@ class Player {
         //TODO:increase or decrease staminaLeft by the power used
 
         this.setPosition(new Position(newX, newY));
-
-        if(this.distanceToPoint(this.ball.position) <= (this.ball.size + this.size)) {
-        	this.ball.takeControl(this);
-        }
 	}
 
     //Kick action resulting movment
@@ -107,10 +104,6 @@ class Player {
         this.ball.move(dt, direction, speed);
         console.log("Kick");
     }
-
-	distanceToPoint(position) {
-		return Math.sqrt(Math.pow(position.x-this.position.x,2) + Math.pow(position.y - this.position.y,2))
-	}
 }
 
 exports.Player = Player;
