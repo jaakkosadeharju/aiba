@@ -103,10 +103,12 @@ setInterval(() => {
     ball.controlledBy.kick(ball, dt, Math.random()*2*Math.PI, 30);
 }, 5000);
 
+// serve static files
 app.use(express.static(__dirname + '/public'));
 
+// get index
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/front/index.html');
 });
 
 io.on('connection', function (socket) {

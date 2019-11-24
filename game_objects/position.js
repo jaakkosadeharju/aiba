@@ -19,7 +19,6 @@ class Position {
   addPolar(r, phi) {
     const dx = r * Math.cos(phi);
     const dy = r * Math.sin(phi);
-    console.log(r,phi,dx,dy);
     
     return new Position(this.x + dx, this.y + dy);
   }
