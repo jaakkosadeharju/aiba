@@ -1,0 +1,15 @@
+body {
+    color: white;
+    background-color: #444;
+}
+
+#stadium {
+    background: #669966;
+    width: 100%;
+    text-align: center;
+}
+
+#game-area {
+    border: 1px solid #000000;
+    width: 100%;
+}
