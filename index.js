@@ -74,7 +74,7 @@ setInterval(() => {
   // this supports more than two teams!
   const closestByTeam = gameData.teams.map(team => team.closestPlayer(ball.position));
   const closestPlayer = closestByTeam.sort((p1, p2) => 
-    p1.position.distanceTo(ball.position) < p2.position.distanceTo(ball.position) ? -1 : 1
+    p1.position.distanceTo(ball.position) <= p2.position.distanceTo(ball.position) ? -1 : 1
   )[0];
 
   // Move the ball
@@ -100,7 +100,7 @@ setInterval(() => {
 setInterval(() => {
   const dt = gameData.clock.getFrame();
   if(ball.controlledBy != null)
-    ball.controlledBy.kick(dt, Math.random()*2*Math.PI, 10);
+    ball.controlledBy.kick(ball, dt, Math.random()*2*Math.PI, 30);
 }, 5000);
 
 app.use(express.static(__dirname + '/public'));
