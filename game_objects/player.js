@@ -1,7 +1,7 @@
 var Position = require('./position.js').Position;
 
 class Player {
-    constructor({id, name, size, position, speed, stamina, power, gameArea}) {
+    constructor({id, name, size, position, speed, stamina, power, team, gameArea}) {
         this.id = id;
         this.name = name;
         this.size = size;
@@ -38,7 +38,7 @@ class Player {
 		this.position = position;
     }
 
-    calculateDirection() {
+    calculateMovingDirection() {
         this.direction = Math.atan2(this.speed.y, this.speed.x);
     }
 
@@ -84,7 +84,7 @@ class Player {
 
         //TODO:increase or decrease staminaLeft by the power used
         
-        this.calculateDirection();
+        this.calculateMovingDirection();
         this.setPosition(new Position(newX, newY));
 	}
 

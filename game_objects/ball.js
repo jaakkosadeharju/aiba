@@ -30,7 +30,7 @@ class Ball {
 		if (this.controlledBy !== null) {
             this.speed.x = 0;
             this.speed.y = 0;
-console.log(closestPlayer.direction);
+
             this.position = this.controlledBy.position.addPolar(closestPlayer.size+this.size, closestPlayer.direction);
 		}
         else {

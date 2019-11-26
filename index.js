@@ -32,11 +32,11 @@ var gameData = {
       color: '#00ff00',
       players: [
         // game area 900x660
-        new Player({id: 11, name: "Ndumiso Nkadimeng", size: playerSize, position: new Position(areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 12, name: "Emlyn Hukkes", size: playerSize, position: new Position(areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 13, name: "Sossermaster", size: playerSize, position: new Position(areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 14, name: "Player 4a", size: playerSize, position: new Position(areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 15, name: "Player 5a", size: playerSize, position: new Position(areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 11, name: "Ndumiso Nkadimeng", size: playerSize, position: new Position(areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 12, name: "Emlyn Hukkes", size: playerSize, position: new Position(areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 13, name: "Sossermaster", size: playerSize, position: new Position(areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 14, name: "Player 4a", size: playerSize, position: new Position(areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 15, name: "Player 5a", size: playerSize, position: new Position(areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
       ]
     }),
     new Team({
@@ -44,11 +44,11 @@ var gameData = {
       name: 'Sandibar',
       color: '#ff0000',
       players: [
-        new Player({id: 21, name: "Player 1b", size: playerSize, position: new Position(3*areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 22, name: "Player 2b", size: playerSize, position: new Position(3*areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 23, name: "Player 3b", size: playerSize, position: new Position(3*areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 24, name: "Player 4b", size: playerSize, position: new Position(3*areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
-        new Player({id: 25, name: "Player 5b", size: playerSize, position: new Position(3*areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea, ball }),
+        new Player({id: 21, name: "Player 1b", size: playerSize, position: new Position(3*areaWidth/4, 1*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 22, name: "Player 2b", size: playerSize, position: new Position(3*areaWidth/4, 2*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 23, name: "Player 3b", size: playerSize, position: new Position(3*areaWidth/4, 3*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 24, name: "Player 4b", size: playerSize, position: new Position(3*areaWidth/4, 4*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
+        new Player({id: 25, name: "Player 5b", size: playerSize, position: new Position(3*areaWidth/4, 5*areaHeight/6), speed: 34, stamina: 33, power: 33, gameArea }),
       ]
     })
   ]
@@ -59,8 +59,12 @@ var gameData = {
 gameData.clock.start();
 
 //Initialize goals
-gameArea.goals[0] = new Goal({team: gameData.teams[0], corners: {topLeft: -goalDepth, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: 0, bottomRight: goalWidth} });
-gameArea.goals[1] = new Goal({team: gameData.teams[1], corners: {topLeft: gameArea.size.width, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: goalDepth, bottomRight: goalWidth} });
+gameArea.goals[0] = new Goal({team: gameData.teams[0], 
+                            corners: {topLeft: -goalDepth, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: 0, bottomRight: goalWidth}, 
+                            position: {x: 0, y: gameArea.size.height/2}});
+gameArea.goals[1] = new Goal({team: gameData.teams[1], 
+                            corners: {topLeft: gameArea.size.width, bottomLeft: (gameArea.size.height-goalWidth)/2, topRight: goalDepth, bottomRight: goalWidth},
+                            position: {x:gameArea.size.width, y: gameArea.size.height/2}});
 
 setInterval(() => {
   const dt = gameData.clock.getFrame();
@@ -71,7 +75,7 @@ setInterval(() => {
       player.move(dt, { force: Math.random()*30, direction: Math.random()*2*Math.PI })));
 
   // Get closest player to the ball
-  // this supports more than two teams!
+  // this supports more than two teams
   const closestByTeam = gameData.teams.map(team => team.closestPlayer(ball.position));
   const closestPlayer = closestByTeam.sort((p1, p2) => 
     p1.position.distanceTo(ball.position) <= p2.position.distanceTo(ball.position) ? -1 : 1
@@ -100,7 +104,7 @@ setInterval(() => {
 setInterval(() => {
   const dt = gameData.clock.getFrame();
   if(ball.controlledBy != null)
-    ball.controlledBy.kick(ball, dt, Math.random()*2*Math.PI, 30);
+    ball.controlledBy.kick(ball, dt, ball.controlledBy.position.directionTo(gameArea.goals.filter(goal => !goal.team.players.includes(ball.controlledBy))[0].position), 30);
 }, 5000);
 
 app.use(express.static(__dirname + '/public'));

@@ -1,7 +1,8 @@
 class Goal {
-    constructor({team, corners}) {
+    constructor({team, corners, position}) {
     	this.team = team;
         this.corners = corners;
+        this.position = position;
     }
 
     isInside(position) {
