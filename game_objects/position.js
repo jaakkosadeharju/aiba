@@ -12,6 +12,13 @@ class Position {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  directionTo(target){
+    const dx = target.x - this.x;
+    const dy = target.y - this.y;
+    
+    return Math.atan2(dy, dx);
+  }
+
   add(delta) {
     return new Position(this.x + delta.x, this.y + delta.y)
   }

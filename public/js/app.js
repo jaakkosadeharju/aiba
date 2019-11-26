@@ -32,7 +32,11 @@ const updateCanvas = () => {
   // draw goals
   gameData.area.goals.forEach(goal => {
     ctx.beginPath();
-    ctx.rect(toCanvasX(goal.corners.topLeft), toCanvasY(goal.corners.bottomLeft), toCanvasX(goal.corners.topRight), toCanvasY(goal.corners.bottomRight));
+    ctx.moveTo(toCanvasX(goal.sides.left), toCanvasY(goal.sides.top));
+    ctx.lineTo(toCanvasX(goal.sides.right), toCanvasY(goal.sides.top));
+    ctx.lineTo(toCanvasX(goal.sides.right), toCanvasY(goal.sides.bottom));
+    ctx.lineTo(toCanvasX(goal.sides.left), toCanvasY(goal.sides.bottom));
+    ctx.lineTo(toCanvasX(goal.sides.left), toCanvasY(goal.sides.top));
     ctx.stroke();
   });
 
