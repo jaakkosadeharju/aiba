@@ -1,11 +1,12 @@
 class Goal {
-    constructor({team, corners}) {
+    constructor({team, sides, position}) {
     	this.team = team;
-        this.corners = corners;
+        this.sides = sides;
+        this.position = position;
     }
 
     isInside(position) {
-    	return position.x > this.corners.topLeft && position.x < this.corners.topRight && position.y > this.corners.topLeft && position.y < this.corners.bottomRight;
+    	return position.x >= this.sides.left && position.x <= this.sides.right && position.y >= this.sides.top && position.y <= this.sides.bottom;
     }
 }
 
