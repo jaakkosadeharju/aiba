@@ -70,13 +70,6 @@ class Ball {
             }
 
             this.position = new Position(newX, newY);
-
-            if(this.gameArea.goals.some(goal => goal.isInside(this.position))) {
-                this.position = new Position(this.gameArea.size.width/2, this.gameArea.size.height/2);
-                this.speed = 0;
-                console.log("Måååål");
-            }
-
         }
 	}
 }

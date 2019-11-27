@@ -38,6 +38,10 @@ class Player {
 		this.position = position;
     }
 
+    resetPosition() {
+        
+    }
+
     calculateDirection() {
         this.direction = Math.atan2(this.speed.y, this.speed.x);
     }
