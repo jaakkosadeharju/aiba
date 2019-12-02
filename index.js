@@ -103,7 +103,8 @@ setInterval(() => {
       position: gameData.ball.position,
       color: gameData.ball.color,
       size: gameData.ball.size
-    }
+    },
+    time: gameData.clock.getTime()
   }));
 }, 100);
 

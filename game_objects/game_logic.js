@@ -17,6 +17,7 @@ class GameLogic {
       }
 
     resetPositions() {
+        this.gameData.ball.resetPosition();
         this.gameData.teams.forEach(team =>
             team.players.forEach(player =>
               player.resetPosition()

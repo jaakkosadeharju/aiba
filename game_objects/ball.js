@@ -5,6 +5,7 @@ class Ball {
     	this.size = size;
         this.weight = 1;
         this.position = position;
+        this.startingPosition = position;
         this.direction = direction;
         this.speed = {
             x: 0,
@@ -71,7 +72,13 @@ class Ball {
 
             this.position = new Position(newX, newY);
         }
-	}
+    }
+    
+    resetPosition() {
+        this.speed.x = 0;
+        this.speed.y = 0;
+        this.position = this.startingPosition;
+    }
 }
 
 exports.Ball = Ball;

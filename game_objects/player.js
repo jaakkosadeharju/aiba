@@ -6,6 +6,7 @@ class Player {
         this.name = name;
         this.size = size;
         this.position = position;
+        this.startingPosition = position;
         this.direction = null;
         this.speed = { //Lets handle this as m/s
             x: 0,
@@ -39,7 +40,7 @@ class Player {
     }
 
     resetPosition() {
-        
+        this.position = this.startingPosition;
     }
 
     calculateDirection() {
