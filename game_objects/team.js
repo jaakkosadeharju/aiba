@@ -5,6 +5,7 @@ class Team {
       this.color = color || '#999999';
       this.players = players || [];
       this.goal = goal;
+      this.score = 0;
     }
 
   closestPlayer(point) {

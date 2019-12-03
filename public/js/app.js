@@ -12,7 +12,8 @@ let gameData = {
     size: 0,
     position: { x: 0, y: 0 },
     color: '#000000'
-  }
+  },
+  clock: null
 };
 const socket = io();
 const canvas = document.getElementById('game-area');
@@ -64,6 +65,9 @@ socket.on('new positions', function (positions) {
   gameData.teams = positionData.teams;
   gameData.ball = positionData.ball;
 
+  document.getElementById('team1-name').innerHTML = gameData.teams[0].name + " " + gameData.teams[0].score;
+  document.getElementById('team2-name').innerHTML = gameData.teams[1].name + " " + gameData.teams[1].score;
+  document.getElementById('game-time').innerHTML = gameData.time;
   updateCanvas();
 });
 

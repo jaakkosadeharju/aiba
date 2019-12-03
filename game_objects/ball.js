@@ -5,6 +5,7 @@ class Ball {
     	this.size = size;
         this.weight = 1;
         this.position = position;
+        this.startingPosition = position;
         this.direction = direction;
         this.speed = {
             x: 0,
@@ -70,15 +71,14 @@ class Ball {
             }
 
             this.position = new Position(newX, newY);
-
-            if(this.gameArea.goals.some(goal => goal.isInside(this.position))) {
-                this.position = new Position(this.gameArea.size.width/2, this.gameArea.size.height/2);
-                this.speed = 0;
-                console.log("Måååål");
-            }
-
         }
-	}
+    }
+    
+    resetPosition() {
+        this.speed.x = 0;
+        this.speed.y = 0;
+        this.position = this.startingPosition;
+    }
 }
 
 exports.Ball = Ball;
