@@ -125,7 +125,7 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user sonnested');
-  socket.emit('area data', JSON.stringify({      
+  socket.emit('area data', JSON.stringify({
     size: {
         height: gameArea.size.height,
         width: gameArea.size.width
