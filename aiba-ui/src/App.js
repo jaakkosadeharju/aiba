@@ -15,13 +15,13 @@ class App extends Component {
     super(props);
 
     this.backendUrl = "http://localhost:3000/";
-    this.socket = io(this.backendUrl);
 
     this.updatePositions = this.updatePositions.bind(this);
     this.updateArea = this.updateArea.bind(this);
+    this.updateTeamData = this.updateTeamData.bind(this);
 
     this.state = {
-      teams: [],
+      teams: null,
       area: {
         size: {
           height: 0,
@@ -39,9 +39,12 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.socket = io(this.backendUrl);
+
     // update state when server sends new positions
     this.socket.on('new positions', this.updatePositions);
     this.socket.on('area data', this.updateArea);
+    this.socket.on('team details', this.updateTeamData);
   }
 
 
@@ -54,7 +57,15 @@ class App extends Component {
     // document.getElementById('game-time').innerHTML = gameData.time;
 
     this.setState((state, props) => ({
-      teams: { ...state.teams, ...teams },
+      teams: state.teams.map(t => ({
+          ...t,
+          players: t.players.map(p => ({
+            ...p,
+            position: teams
+              .find(team => team.id === t.id)
+              .players.find(player => player.id === p.id).position
+          })
+        )})),
       ball: { ...state.ball, ...ball }
     }));
   }
@@ -70,7 +81,31 @@ class App extends Component {
     }));
   }
 
+  // merge team data from server to the state
+  updateTeamData(teamData) {
+    const teams = JSON.parse(teamData);
+
+    this.setState((state, props) => {
+      return state.teams
+      ? {
+        teams: state.teams.map(stateTeam => {
+          const t = teams.find(t => stateTeam.id === t.id);
+          return {
+            ...stateTeam,
+            ...t,
+            players: (stateTeam.players || []).map(statePlayer => ({
+              ...statePlayer,
+              ...t.players.find(player => player.id === statePlayer.id)
+            })),
+          }
+        }),
+      }
+      : {teams}
+    });
+  }
+
   render() {
+    const teams = this.state.teams || [];
     return (
       <Box className="App">
         <header className="App-header">
@@ -79,17 +114,17 @@ class App extends Component {
         </header>
         <Grid container>
           <Grid item xs={3}>
-            <Team team={this.state.teams[0]}></Team>
+            <Team team={teams[0]}></Team>
           </Grid>
           <Grid item xs={6}>
             <GameArea
               socket={this.socket}
-              teams={this.state.teams}
+              teams={teams}
               ball={this.state.ball}
               area={this.state.area}></GameArea>
           </Grid>
           <Grid item xs={3}>
-            <Team team={this.state.teams[1]}></Team>
+            <Team team={teams[1]}></Team>
           </Grid>
         </Grid>
       </Box>

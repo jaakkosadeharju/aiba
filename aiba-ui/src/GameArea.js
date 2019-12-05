@@ -7,13 +7,10 @@ class GameArea extends Component {
         // reference to canvas element
         this.canvas = React.createRef();
     }
-    
-
 
     componentDidUpdate() {
         this.updateCanvas();
     }
-
 
     updateCanvas() {
         const canvas = this.canvas.current;
@@ -44,7 +41,7 @@ class GameArea extends Component {
         });
 
         // draw players
-        Object.values(teams).forEach(team => {
+        teams.forEach(team => {
             team.players.forEach(player => {
                 ctx.beginPath();
                 ctx.arc(toCanvasX(player.position.x), toCanvasY(player.position.y), player.size, 0, 2 * Math.PI);

@@ -57,8 +57,8 @@ var gameData = {
     })
   ],
 };
-var gameLogic = new GameLogic(gameData, 2, 10);
 
+var gameLogic = new GameLogic(gameData, 2, 10);
 
 //Initialize goals
 gameArea.goals[0] = new Goal({team: gameData.teams[0], 
@@ -95,6 +95,7 @@ setInterval(() => {
     teams: gameData.teams.map(team => ({
       ...team,
       players: team.players.map(player => ({
+        id: player.id,
         position: player.position,
         size: playerSize
       }))
@@ -135,6 +136,21 @@ io.on('connection', function (socket) {
         size: goalWidth
       })),
     }));
+
+  // Full data of teams (player names, colours etc.)
+  // Should be emitted when team or player data is changed
+  socket.emit('team details', JSON.stringify(
+    gameData.teams.map(team => ({
+      ...team,
+      players: team.players.map(player => ({
+        id: player.id,
+        name: player.name,
+        skills: player.skills,
+        position: player.position,
+        size: player.size
+      }))
+    }))
+  ));
 });
 
 http.listen(3000, function () {
