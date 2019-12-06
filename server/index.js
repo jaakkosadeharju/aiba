@@ -57,8 +57,8 @@ var gameData = {
     })
   ],
 };
-var gameLogic = new GameLogic(gameData, 2, 10);
 
+var gameLogic = new GameLogic(gameData, 2, 10);
 
 //Initialize goals
 gameArea.goals[0] = new Goal({team: gameData.teams[0], 
@@ -67,6 +67,8 @@ gameArea.goals[0] = new Goal({team: gameData.teams[0],
 gameArea.goals[1] = new Goal({team: gameData.teams[1], 
                             sides: {left: gameArea.size.width, bottom: (gameArea.size.height+goalWidth)/2, right: gameArea.size.width+goalDepth, top: (gameArea.size.height-goalWidth)/2},
                             position: {x:gameArea.size.width, y: gameArea.size.height/2}});
+
+gameData.clock.start();
 
 setInterval(() => {
   const dt = gameData.clock.getFrame();
@@ -95,6 +97,7 @@ setInterval(() => {
     teams: gameData.teams.map(team => ({
       ...team,
       players: team.players.map(player => ({
+        id: player.id,
         position: player.position,
         size: playerSize
       }))
@@ -125,7 +128,7 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user sonnested');
-  socket.emit('area data', JSON.stringify({      
+  socket.emit('area data', JSON.stringify({
     size: {
         height: gameArea.size.height,
         width: gameArea.size.width
@@ -135,6 +138,21 @@ io.on('connection', function (socket) {
         size: goalWidth
       })),
     }));
+
+  // Full data of teams (player names, colours etc.)
+  // Should be emitted when team or player data is changed
+  socket.emit('team details', JSON.stringify(
+    gameData.teams.map(team => ({
+      ...team,
+      players: team.players.map(player => ({
+        id: player.id,
+        name: player.name,
+        skills: player.skills,
+        position: player.position,
+        size: player.size
+      }))
+    }))
+  ));
 });
 
 http.listen(3000, function () {

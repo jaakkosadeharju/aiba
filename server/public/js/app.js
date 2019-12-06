@@ -56,7 +56,6 @@ const updateCanvas = () => {
   ctx.arc(toCanvasX(gameData.ball.position.x), toCanvasY(gameData.ball.position.y), gameData.ball.size, 0, 2 * Math.PI);
   ctx.fillStyle = gameData.ball.color;
   ctx.fill();
-
 };
 
 // update canvas when server sends new positions
