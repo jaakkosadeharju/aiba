@@ -8,3 +8,4 @@
 ### Starting UI dev environment
 - run `npm install`
 - run `npm start`
+  - http://localhost:3000/ opens automatically
