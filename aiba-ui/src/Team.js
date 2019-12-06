@@ -15,7 +15,10 @@ const useStyles = makeStyles({
         clear: 'both',
         overflow: 'auto'
     },
-    teamName:{
+    teamNameContainer: {
+        padding: '1em', 
+    },
+    teamName: {
         lineHeight: '1.5em',
         fontSize: '1.7em',
         paddingLeft: '2em',
@@ -31,18 +34,20 @@ const Team = ({ team }) => {
 
     return (
         team
-            ? <Paper m={1} key={team.id} className={classes.team}>
-                <Box className={classes.clear}>
+            ? <Box>
+                <Box className={classes.teamNameContainer}>
                     <Avatar aria-label="team name" className={classes.avatar}
-                    style={{ backgroundColor: team.color}}>
-                    {team.name[0]}
-                </Avatar>
-                <Box className={classes.teamName}>{team.name}</Box>
+                        style={{ backgroundColor: team.color }}>
+                        {team.name[0]}
+                    </Avatar>
+                    <Box className={classes.teamName}>{team.name}</Box>
                 </Box>
-                <Box className={classes.clear}>
-                    <PlayerList players={team.players}></PlayerList>
-                </Box>
-            </Paper>
+                <Paper m={1} key={team.id} className={classes.team}>
+                    <Box className={classes.clear}>
+                        <PlayerList players={team.players}></PlayerList>
+                    </Box>
+                </Paper>
+            </Box>
             : null
     );
 }

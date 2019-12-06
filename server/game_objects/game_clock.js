@@ -7,7 +7,7 @@ class GameClock {
   }
 
   getTime() {
-    return this.gameTime + this.runningTime();
+    return this.startTime ? this.gameTime + this.runningTime() : 0;
   }
 
   // set calculation time and get time delta 

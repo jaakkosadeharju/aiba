@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 import './App.css';
 import GameArea from './GameArea';
+import Clock from './Clock';
 import Team from './Team';
 
 
@@ -49,7 +50,7 @@ class App extends Component {
 
 
   updatePositions(positions) {
-    const { teams, ball } = JSON.parse(positions);
+    const { teams, ball, time } = JSON.parse(positions);
 
     // TODO: SET THESE
     // document.getElementById('team1-name').innerHTML = gameData.teams[0].name + " " + gameData.teams[0].score;
@@ -66,6 +67,7 @@ class App extends Component {
               .players.find(player => player.id === p.id).position
           })
         )})),
+      time: time,
       ball: { ...state.ball, ...ball }
     }));
   }
@@ -117,11 +119,15 @@ class App extends Component {
             <Team team={teams[0]}></Team>
           </Grid>
           <Grid item xs={6}>
-            <GameArea
+            <Box>
+              <Clock time={this.state.time} teams={this.state.teams}></Clock>
+            </Box>
+            <Box><GameArea
               socket={this.socket}
               teams={teams}
               ball={this.state.ball}
-              area={this.state.area}></GameArea>
+              area={this.state.area}></GameArea></Box>
+            
           </Grid>
           <Grid item xs={3}>
             <Team team={teams[1]}></Team>

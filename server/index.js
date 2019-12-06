@@ -68,6 +68,8 @@ gameArea.goals[1] = new Goal({team: gameData.teams[1],
                             sides: {left: gameArea.size.width, bottom: (gameArea.size.height+goalWidth)/2, right: gameArea.size.width+goalDepth, top: (gameArea.size.height-goalWidth)/2},
                             position: {x:gameArea.size.width, y: gameArea.size.height/2}});
 
+gameData.clock.start();
+
 setInterval(() => {
   const dt = gameData.clock.getFrame();
 
