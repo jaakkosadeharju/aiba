@@ -57,16 +57,16 @@ var gameData = {
     })
   ],
 };
-
+gameData.teams[0].score = 1;
 var gameLogic = new GameLogic(gameData, 2, 10);
 
-//Initialize goals
+//Initialize goals (target goals for the teams)
 gameArea.goals[0] = new Goal({team: gameData.teams[0], 
-                            sides: {left: -goalDepth, bottom: (gameArea.size.height+goalWidth)/2, right: 0, top: (gameArea.size.height-goalWidth)/2}, 
-                            position: {x: 0, y: gameArea.size.height/2}});
-gameArea.goals[1] = new Goal({team: gameData.teams[1], 
                             sides: {left: gameArea.size.width, bottom: (gameArea.size.height+goalWidth)/2, right: gameArea.size.width+goalDepth, top: (gameArea.size.height-goalWidth)/2},
                             position: {x:gameArea.size.width, y: gameArea.size.height/2}});
+gameArea.goals[1] = new Goal({team: gameData.teams[1],
+                            sides: {left: -goalDepth, bottom: (gameArea.size.height+goalWidth)/2, right: 0, top: (gameArea.size.height-goalWidth)/2}, 
+                            position: {x: 0, y: gameArea.size.height/2}});
 
 gameData.clock.start();
 
@@ -89,7 +89,7 @@ setInterval(() => {
   ball.move(dt, closestPlayer, ball.direction, Math.sqrt(Math.pow(ball.speed.x, 2) + Math.pow(ball.speed.y, 2)));
   if(gameArea.goals.some(goal => goal.isInside(ball.position))) {
     let goal = gameArea.goals.find(goal => goal.isInside(ball.position));
-    console.log(gameLogic.scoreGoal(goal.team));
+    gameLogic.scoreGoal(goal.team);
     gameLogic.resetPositions();
   }
 
@@ -115,7 +115,7 @@ setInterval(() => {
 setInterval(() => {
   const dt = gameData.clock.getFrame();
   if(ball.controlledBy != null)
-    ball.controlledBy.kick(ball, dt, ball.controlledBy.position.directionTo(gameArea.goals.filter(goal => !goal.team.players.includes(ball.controlledBy))[0].position), 30);
+    ball.controlledBy.kick(ball, dt, ball.controlledBy.position.directionTo(gameArea.goals.find(goal => goal.team.players.includes(ball.controlledBy)).position), 30);
 }, 5000);
 
 // serve static files
