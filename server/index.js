@@ -57,7 +57,7 @@ var gameData = {
     })
   ],
 };
-gameData.teams[0].score = 1;
+
 var gameLogic = new GameLogic(gameData, 2, 10);
 
 //Initialize goals (target goals for the teams)
@@ -67,6 +67,8 @@ gameArea.goals[0] = new Goal({team: gameData.teams[0],
 gameArea.goals[1] = new Goal({team: gameData.teams[1],
                             sides: {left: -goalDepth, bottom: (gameArea.size.height+goalWidth)/2, right: 0, top: (gameArea.size.height-goalWidth)/2}, 
                             position: {x: 0, y: gameArea.size.height/2}});
+
+gameData.clock.start();
 
 gameData.clock.start();
 
