@@ -60,6 +60,7 @@ class App extends Component {
     this.setState((state, props) => ({
       teams: state.teams.map(t => ({
           ...t,
+          score: teams.find(team => team.id === t.id).score,
           players: t.players.map(p => ({
             ...p,
             position: teams
@@ -108,6 +109,7 @@ class App extends Component {
 
   render() {
     const teams = this.state.teams || [];
+    
     return (
       <Box className="App">
         <header className="App-header">
@@ -120,7 +122,9 @@ class App extends Component {
           </Grid>
           <Grid item xs={6}>
             <Box>
-              <Clock time={this.state.time} teams={this.state.teams}></Clock>
+              <Clock time={this.state.time}
+                team1Score={(teams[0] || {}).score}
+                team2Score={(teams[1] || {}).score}></Clock>
             </Box>
             <Box><GameArea
               socket={this.socket}

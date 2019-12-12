@@ -19,11 +19,12 @@ const useStyles = makeStyles({
     }
 });
 
-const Clock = ({ time, teams }) => {
+const Clock = ({ time, team1Score, team2Score }) => {
     const classes = useStyles();
     const timeInSeconds = Math.round(time / 1000);
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
+    
     return (
         <Grid container>
             <Grid item xs={4}></Grid>
@@ -37,7 +38,7 @@ const Clock = ({ time, teams }) => {
                         }
                     </Box>
                     <Box className={classes.score}>
-                        {((teams || [])[0] || {}).score} - {((teams || [])[1] || {}).score}
+                        {team1Score} - {team2Score}
                     </Box>
 
                 </Paper>
